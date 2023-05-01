@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block schema %}
+{% if web_page_schema %}{{web_page_schema|safe}}{% endif %}
+{% endblock schema %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% endblock style %}
+
+
+{% block body %}
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-lg-7 col-xl-8">
+			<h1>{{blog_obj.meta_title}}</h1>
+			<small>{{blog_obj.created_at|date:"F d, Y"}}</small>
+			<p class="mb-0 pb-0">
+				Medically reviewed by 
+				<a href="{% url 'web_app:doctor_url' blog_obj.reviewed_by.slug %}" target="_blank">{{blog_obj.reviewed_by}}</a>
+			</p>
+			<p>
+				By 
+				<a href="{% url 'web_app:doctor_url' blog_obj.created_by.slug %}" target="_blank">{{blog_obj.created_by}}</a>
+			</p>
+
+			{% if blog_obj.toc %}
+			<div class="card my-4">
+				<div class="card-header">
+					In This Article
+				</div>
+				<div class="card-body">
+					{{blog_obj.toc|safe}}
+				</div>
+			</div>
+			{% endif %}
+
+			<div class="guides">
+				{{blog_obj.content|safe}}
+			</div>
+		</div> <!-- Left side div -->
+
+		<div class="recent-blogs-links col-lg-5 col-xl-4">
+			<h3 style="font-weight: 600;">Recent Articles</h3>
+			<ul class="p-2">
+				{% for guide in latest_blogs %}
+				<li class="mb-3">
+					<a class="row no-gutters" href="{{guide.link}}">
+						<img class="pr-2 sm-img col-5" alt="{{guide.img_alt}}" src="{{guide.img}}">
+						<span class="col-7">{{guide.title|truncatechars:60}}</span>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div> <!-- Right side div -->
+	</div> <!-- row -->
+</div>
+{% endblock body %}
+
+
+{% block script %}
+<script>
+	$(document).ready(function () {
+		$(".guides p:has(img)").css({ "text-align": "center" });
+	});
+</script>
+{% endblock script %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block body %}
+<div class="container mt-4">
+  <div class="card guides">
+    <div class="card-body">
+        <div class="card-text">
+            {{homepage_blog_obj.content|render_template_content:render_template_content_context}}
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
